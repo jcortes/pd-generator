@@ -1,0 +1,15 @@
+import <%= app %> from "../../<%= app %>.app.mjs";
+import common from "../common.mjs";
+
+export default {
+  key: "<%= key %>",
+  name: "<%= name %>",
+  description: "<%= description %>",
+  type: "source",
+  version: "<%= version %>",
+  methods: common.methods,
+  props: {
+    <%= app %>,
+  },
+  async run({ $ }) {},
+};

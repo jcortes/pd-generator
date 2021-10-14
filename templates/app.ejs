@@ -1,0 +1,34 @@
+import { axios } from "@pipedreamhq/platform";
+
+export default {
+  type: "app",
+  app: "<%= app %>",
+  propDefinitions: {},
+  methods: {
+    async _makeRequest(opts) {
+      const {
+        $,
+        path,
+        ...otherOpts
+      } = opts;
+
+      const authorization = "Change auth token here";
+      const headers = {
+        ...otherOpts.headers,
+        authorization,
+        "user-agent": "@PipedreamHQ/pipedream v0.1",
+      };
+
+      const basePath = "<%= basePath %>";
+      const url = `${basePath}${path}`;
+
+      const config = {
+        ...otherOpts,
+        headers,
+        url,
+      };
+
+      return await axios($ ?? this, config);
+    },
+  },
+};
