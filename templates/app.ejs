@@ -1,9 +1,16 @@
-import { axios } from "@pipedreamhq/platform";
+import { axios } from "@pipedream/platform";
+import constants from "./common/constants.mjs";
 
 export default {
   type: "app",
   app: "<%= app %>",
-  propDefinitions: {},
+  propDefinitions: {
+    commonProperty: {
+      type: "string",
+      label: "Common property",
+      description: "[See the docs here](https://example.com)",
+    },
+  },
   methods: {
     async _makeRequest(opts) {
       const {
@@ -16,11 +23,9 @@ export default {
       const headers = {
         ...otherOpts.headers,
         authorization,
-        "user-agent": "@PipedreamHQ/pipedream v0.1",
       };
 
-      const basePath = "<%= basePath %>";
-      const url = `${basePath}${path}`;
+      const url = `${constants.BASE_URL}${constants.VERSION_PATH}${path}`;
 
       const config = {
         ...otherOpts,

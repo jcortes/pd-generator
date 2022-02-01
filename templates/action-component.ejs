@@ -1,15 +1,13 @@
-import <%= app %> from "../../<%= app %>.app.mjs";
 import common from "../common.mjs";
 
+const { <%= app %> } = common.props;
+
 export default {
+  ...common,
   key: "<%= key %>",
   name: "<%= name %>",
   description: "<%= description %>",
   type: "action",
   version: "<%= version %>",
-  methods: common.methods,
-  props: {
-    <%= app %>,
-  },
   async run({ $ }) {},
 };
