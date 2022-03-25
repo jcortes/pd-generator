@@ -1,5 +1,3 @@
-Create Item | Creates an item
-Update Item Name | Update an item's name
-Create Board | Creates a new board
-Create Group | Creates a new group in a specific board
-Create an Update | Creates a new update
+Create Message | Post a plain text or [rich text](https://developer.webex.com/docs/basics#formatting-messages) message, and optionally, a [file attachment](https://developer.webex.com/docs/basics#message-attachments), to a room on Behalf of a Bot. [See the docs here](https://developer.webex.com/docs/api/v1/messages/create-a-message)
+Create a Room | Creates a room. The authenticated user is automatically added as a member of the room. [See the docs here](https://developer.webex.com/docs/api/v1/rooms/create-a-room)
+Create Person | Create a new user account for a given organization. Only an admin can create a new user account. [See the docs here](https://developer.webex.com/docs/api/v1/people/create-a-person)

@@ -1,0 +1,2 @@
+Issue created (Instant) | Issue created. See the docs [here](https://developers.linear.app/docs/graphql/webhooks)
+Issue updated (Instant) | Issue updated. See the docs [here](https://developers.linear.app/docs/graphql/webhooks)

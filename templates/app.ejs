@@ -12,25 +12,30 @@ export default {
     },
   },
   methods: {
-    async _makeRequest(opts) {
+    getBaseUrl() {
+      return `${constants.BASE_URL}${constants.VERSION_PATH}`;
+    },
+    getUrl(path) {
+      return `${this.getBaseUrl()}${path}`;
+    },
+    getHeaders(headers) {
+      return {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${this.$auth.api_key}`,
+        ...headers,
+      };
+    },
+    async makeRequest(customConfig) {
       const {
         $,
         path,
-        ...otherOpts
-      } = opts;
-
-      const authorization = "Change auth token here";
-      const headers = {
-        ...otherOpts.headers,
-        authorization,
-      };
-
-      const url = `${constants.BASE_URL}${constants.VERSION_PATH}${path}`;
+        ...otherConfig
+      } = customConfig;
 
       const config = {
-        ...otherOpts,
-        headers,
-        url,
+        headers: this.getHeaders(otherConfig.headers),
+        url: this.getUrl(path),
+        ...otherConfig,
       };
 
       return await axios($ ?? this, config);

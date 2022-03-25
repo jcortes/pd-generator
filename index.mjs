@@ -10,13 +10,14 @@ const __dirname = dirname(__filename);
 
 const args = yargsParser(process.argv.slice(2));
 const templatesDir = join(__dirname, "templates"); 
+const packageTemplateFile = join(templatesDir, "package.json.ejs");
 const appTemplateFile = join(templatesDir, "app.ejs");
-const commonBaseTemplateFile = join(templatesDir, "common-base.ejs");
-const commonConstantsTemplateFile = join(templatesDir, "common-constants.ejs");
-const commonUtilsTemplateFile = join(templatesDir, "common-utils.ejs");
-const actionComponentTemplateFile = join(templatesDir, "action-component.ejs");
-const sourceComponentTemplateFile = join(templatesDir, "source-component.ejs");
-const componentCommonTemplateFile = join(templatesDir, "component-common.ejs");
+const commonBaseTemplateFile = join(templatesDir, "common.base.ejs");
+const commonConstantsTemplateFile = join(templatesDir, "common.constants.ejs");
+const commonUtilsTemplateFile = join(templatesDir, "common.utils.ejs");
+const actionComponentTemplateFile = join(templatesDir, "action.component.ejs");
+const sourceComponentTemplateFile = join(templatesDir, "source.component.ejs");
+const componentCommonTemplateFile = join(templatesDir, "component.common.ejs");
 
 const jsExtension = "mjs";
 
@@ -67,6 +68,15 @@ const main = () => {
           fsExtra.mkdirSync(app);
         }
 
+        // Creates the package.json file
+        const packageFilePath = join(app, "package.json");
+        const packageFileContent = await renderFile(packageTemplateFile, {
+          app,
+          appCapitalized: app.replace(/\w/, fstLetter => fstLetter.toUpperCase()),
+        });
+        fsExtra.outputFileSync(packageFilePath, packageFileContent);
+
+        // Creates the main app file
         const appFilePath = join(app, `${app}.app.${jsExtension}`);
         const appFileContent = await renderFile(appTemplateFile, { app });
         fsExtra.outputFileSync(appFilePath, appFileContent);
