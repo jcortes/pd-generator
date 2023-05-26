@@ -15,8 +15,8 @@ export default {
     getBaseUrl() {
       return `${constants.BASE_URL}${constants.VERSION_PATH}`;
     },
-    getUrl(path) {
-      return `${this.getBaseUrl()}${path}`;
+    getUrl(path, url) {
+      return url || `${this.getBaseUrl()}${path}`;
     },
     getHeaders(headers) {
       return {
@@ -25,20 +25,86 @@ export default {
         ...headers,
       };
     },
-    async makeRequest(customConfig) {
-      const {
-        $,
-        path,
-        ...otherConfig
-      } = customConfig;
+    makeRequest({
+      step = this, path, headers, url, ...args
+    } = {}) {
 
       const config = {
-        headers: this.getHeaders(otherConfig.headers),
-        url: this.getUrl(path),
-        ...otherConfig,
+        headers: this.getHeaders(headers),
+        url: this.getUrl(path, url),
+        ...args,
       };
 
-      return await axios($ ?? this, config);
+      return axios(step, config);
     },
+    post(args = {}) {
+      return this.makeRequest({
+        method: "post",
+        ...args,
+      });
+    },
+    put(args = {}) {
+      return this.makeRequest({
+        method: "put",
+        ...args,
+      });
+    },
+    delete(args = {}) {
+      return this.makeRequest({
+        method: "delete",
+        ...args,
+      });
+    },
+    patch(args = {}) {
+      return this.makeRequest({
+        method: "patch",
+        ...args,
+      });
+    },<% if (hasPolling) { %>
+    async *getResourcesStream({
+      resourceFn,
+      resourceFnArgs,
+      resourceName,
+      lastCreatedAt,
+      max = constants.DEFAULT_MAX,
+    }) {
+      let page = 1;
+      let resourcesCount = 0;
+
+      while (true) {
+        const response =
+          await resourceFn({
+            ...resourceFnArgs,
+            params: {
+              ...resourceFnArgs.params,
+              page,
+            },
+          });
+
+        const nextResources = resourceName && response[resourceName] || response;
+
+        if (!nextResources?.length) {
+          console.log("No more resources found");
+          return;
+        }
+
+        for (const resource of nextResources) {
+          const dateFilter =
+            lastCreatedAt
+            && Date.parse(resource.created_at) > Date.parse(lastCreatedAt);
+
+          if (!lastCreatedAt || dateFilter) {
+            yield resource;
+            resourcesCount += 1;
+          }
+
+          if (resourcesCount >= max) {
+            return;
+          }
+        }
+
+        page += 1;
+      }
+    },<% } %>
   },
 };

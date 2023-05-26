@@ -1,3 +1,4 @@
-Create Message | Post a plain text or [rich text](https://developer.webex.com/docs/basics#formatting-messages) message, and optionally, a [file attachment](https://developer.webex.com/docs/basics#message-attachments), to a room on Behalf of a Bot. [See the docs here](https://developer.webex.com/docs/api/v1/messages/create-a-message)
-Create a Room | Creates a room. The authenticated user is automatically added as a member of the room. [See the docs here](https://developer.webex.com/docs/api/v1/rooms/create-a-room)
-Create Person | Create a new user account for a given organization. Only an admin can create a new user account. [See the docs here](https://developer.webex.com/docs/api/v1/people/create-a-person)
+Create Or Update Inventory Product | It allows you to add a new product to BaseLinker catalog. Entering the product with the ID updates previously saved product. [See the Documentation](https://api.baselinker.com/index.php?method=addInventoryProduct).
+Delete Inventory Product | It allows you to remove the product from BaseLinker catalog. [See the Documentation](https://api.baselinker.com/index.php?method=deleteInventoryProduct).
+Create Order | It allows adding a new order to the BaseLinker order manager. [See the Documentation](https://api.baselinker.com/index.php?method=addOrder).
+Update Order Status | It allows you to change order status. [See the Documentation](https://api.baselinker.com/index.php?method=setOrderStatus).

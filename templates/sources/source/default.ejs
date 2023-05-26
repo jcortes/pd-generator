@@ -1,0 +1,14 @@
+import app from "../../<%= app %>.app.mjs";
+
+export default {
+  key: "<%= key %>",
+  name: "<%= name %>",
+  description: "<%= description %>",
+  type: "source",
+  version: "0.0.1",
+  dedupe: "unique",
+  props: {
+    app,
+  },
+  async run() {},
+};
