@@ -3,8 +3,9 @@ import common from "../common/polling.mjs";
 export default {
   ...common,
   key: "<%= key %>",
-  name: "<%= name %>",
-  description: "<%= description %>",
+  name: "<%= name %>",<% if (apiDocsUrl) { %>
+  description: "<%= description %> [See the documentation](<%= apiDocsUrl %>)",<% } else { %>
+  description: "<%= description %>",<% } %>
   type: "source",
   version: "0.0.1",
   dedupe: "unique",

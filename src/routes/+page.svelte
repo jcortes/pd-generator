@@ -1,25 +1,23 @@
-<script>
+<script lang="ts">
   let app = "";
   let baseUrl = "";
   let versionPath = "";
   let buildPath = "";
+  let mainApiDocs = "";
+  let mainApiDocsUrl = "";
 
-  /**
-	 * @type {{ name: string, description: string }[]}
-	 */
-  let actions = [];
-  /**
-	 * @type {{ name: string, description: string, strategy: "default" | "polling" | "webhook" }[]}
-	 */
-  let sources = [];
-  /**
-	 * @type {{ success: any; message: any; } | undefined}
-	 */
-  let data;
+  let actions: App.ActionProps[] = [];
+  let sources: App.SourceProps[] = [];
+  
+  let responseData: App.ResponseData | undefined;
 
   async function handleSubmit() {
-    data = undefined;
-    const response = await fetch("/api/generator", {
+    responseData = {
+      success: undefined,
+      message: undefined,
+      loading: true
+    };
+    const response = await fetch("/", {
       method: "POST",
       body: JSON.stringify({
         app,
@@ -27,43 +25,35 @@
         versionPath,
         actions,
         sources,
-        buildPath
+        buildPath,
+        mainApiDocs,
+        mainApiDocsUrl
       }),
       headers: {
         "content-type": "application/json",
         "Accept": "application/json"
       }
     });
-    data = await response.json();
+    responseData = await response.json();
   }
 
   function addAction() {
-    actions = actions.concat({ name: "", description: "" });
+    actions = actions.concat({ name: "", description: "", apiDocsUrl: "" });
   }
 
-  /**
-	 * @param {number} index
-	 */
-  function removeAction(index) {
+  function removeAction(index: number) {
     actions = actions.filter((_, idx) => idx !== index);
   }
 
   function addSource() {
-    sources = sources.concat({ name: "", description: "", strategy: "default" });
+    sources = sources.concat({ name: "", description: "", apiDocsUrl: "", strategy: "default" });
   }
 
-  /**
-	 * @param {number} index
-	 */
-  function removeSource(index) {
+  function removeSource(index: number) {
     sources = sources.filter((_, idx) => idx !== index);
   }
 
-  /**
-	 * @param {number} index
-	 * @param {string} description
-	 */
-  function handleSourceDescription(index, description) {
+  function handleSourceDescription(index: number, description: string) {
     if (description.includes("|")) {
       const [name, desc] = description.split("|");
       sources = sources.map((source, idx) => {
@@ -78,11 +68,7 @@
     }
   }
 
-  /**
-	 * @param {number} index
-	 * @param {string} description
-	 */
-  function handleActionDescription(index, description) {
+  function handleActionDescription(index: number, description: string) {
     if (description.includes("|")) {
       const [name, desc] = description.split("|");
       actions = actions.map((action, idx) => {
@@ -128,6 +114,14 @@
   {#each actions as action, idx}
     <br>
     <div style="display: flex; justify-content: left;">
+      <input id="url-api-docs" type="text" bind:value={action.apiDocsUrl} placeholder="URL API Docs" style="flex-basis: 60%; margin-right: 6px; font-size: inherit;"/>
+    </div>
+    <br>
+    <div style="display: flex; justify-content: left;">
+      <textarea bind:value={action.apiDocs} placeholder="API Docs" rows="10" cols="150" style="flex-basis: 60%; margin-right: 6px; font-size: inherit;"></textarea>
+    </div>
+    <br>
+    <div style="display: flex; justify-content: left;">
       <input type="text" bind:value={action.name} placeholder="Name" style="flex-basis: 15%; margin-right: 6px; font-size: inherit;"/>
       <textarea bind:value={action.description} placeholder="Description" rows="3" style="flex-basis: 45%; margin-right: 6px; font-size: inherit;" on:change={() => handleActionDescription(idx, action.description)}></textarea>
       <button type="button" on:click={() => removeAction(idx)} style="height: 4vh; width: 3vw; font-size: inherit;">x</button>
@@ -140,6 +134,14 @@
     <button type="button" on:click={addSource} style="height: 4vh; width: 3vw; font-size: inherit;">+</button>
   </div>
   {#each sources as source, idx}
+    <br>
+    <div style="display: flex; justify-content: left;">
+      <input id="url-api-docs" type="text" bind:value={source.apiDocsUrl} placeholder="URL API Docs" style="flex-basis: 60%; margin-right: 6px; font-size: inherit;"/>
+    </div>
+    <br>
+    <div style="display: flex; justify-content: left;">
+      <textarea bind:value={source.apiDocs} placeholder="API Docs" rows="10" cols="150" style="flex-basis: 60%; margin-right: 6px; font-size: inherit;"></textarea>
+    </div>
     <br>
     <div style="display: flex; justify-content: left;">
       <input type="text" bind:value={source.name} placeholder="Name" style="flex-basis: 15%; margin-right: 6px; font-size: inherit;"/>
@@ -158,18 +160,34 @@
 
   <br>
   <br>
+  <div style="display: flex; justify-content: left;">
+    <input id="url-api-docs" type="text" bind:value={mainApiDocsUrl} placeholder="URL API Docs" style="flex-basis: 45%; margin-right: 6px; font-size: inherit;"/>
+  </div>
+  <br>
+  <div style="display: flex; justify-content: left;">
+    <textarea bind:value={mainApiDocs} placeholder="API Docs" rows="10" cols="150" style="flex-basis: 45%; margin-right: 6px; font-size: inherit;"></textarea>
+  </div>
+  <br>
+  <br>
+
+  {#if !responseData?.loading}
   <div>
     <button type="button" on:click={handleSubmit} style="height: 4vh; width: 6vw; font-size: large;">Submit</button>
   </div>
+  {/if}
 </form>
 
-{#if data?.success}
+{#if responseData?.success}
   <div>
     <h2>App generated successfully!</h2>
   </div>
-{:else if data?.message}
+{:else if responseData?.loading}
+  <div>
+    <h2>Generating app...</h2>
+  </div>
+{:else if responseData?.message}
   <div>
     <h2>Error generating app</h2>
-    <pre>{data?.message}</pre>
+    <pre>{responseData?.message}</pre>
   </div>
 {/if}

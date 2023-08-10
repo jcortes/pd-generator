@@ -1,4 +1,0 @@
-Create Or Update Inventory Product | It allows you to add a new product to BaseLinker catalog. Entering the product with the ID updates previously saved product. [See the Documentation](https://api.baselinker.com/index.php?method=addInventoryProduct).
-Delete Inventory Product | It allows you to remove the product from BaseLinker catalog. [See the Documentation](https://api.baselinker.com/index.php?method=deleteInventoryProduct).
-Create Order | It allows adding a new order to the BaseLinker order manager. [See the Documentation](https://api.baselinker.com/index.php?method=addOrder).
-Update Order Status | It allows you to change order status. [See the Documentation](https://api.baselinker.com/index.php?method=setOrderStatus).

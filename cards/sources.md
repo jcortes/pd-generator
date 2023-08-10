@@ -1,2 +1,0 @@
-Order Status Updated | Emit new event when an order status changes in BaseLinker. [See the Documentation](https://api.baselinker.com/index.php?method=getOrderStatusList).
-New Order Created | Emit new event when a new order is created in BaseLinker. [See the Documentation](https://api.baselinker.com/index.php?method=getOrders).

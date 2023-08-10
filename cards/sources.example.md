@@ -1,1 +1,0 @@
-Subtitles published | Emit new event subtitles published [See the docs here](https://apidocs.amara.org/#video-notifications)

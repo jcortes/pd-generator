@@ -364,6 +364,11 @@ function addEllipsis(text, maxLength = 20) {
     : text.substring(0, maxLength - 3) + "...";
 }
 
+function splitString(str, nthChar = 8) {
+  const regex = new RegExp(`.{1,${nthChar}}`, "g");
+  return str.match(regex);
+}
+
 /*
 function buildPropDefinitions({
   app = {}, props = {},
@@ -464,4 +469,5 @@ export default {
   strToFloat,
   parseFields,
   addEllipsis,
+  splitString,
 };
