@@ -25,25 +25,17 @@ export async function POST({ request }) {
     buildPath = "build",
     mainApiDocs,
     mainApiDocsUrl,
-  }: {
-    app: string;
-    baseUrl: string;
-    versionPath: string;
-    actions: any[];
-    sources: any[];
-    buildPath: string;
-    mainApiDocs: string;
-    mainApiDocsUrl: string;
-  } = await request.json();
+    aiEnabled = false,
+  }: App.RequestData = await request.json();
 
   if (!app) {
     throw error(400, "Missing app name");
   }
 
-  const mainApiDocsContent = mainApiDocsUrl
+  const mainApiDocsContent = aiEnabled
+    && mainApiDocsUrl
     && await browserless.getApiDocsByUrl(mainApiDocsUrl)
     || mainApiDocs;
-  console.log(`mainApiDocsContent!!!`, mainApiDocsContent);
 
   let templates = "";
   const hasPolling = sources.some(({ strategy }) => strategy === STRATEGY.POLLING);
@@ -79,7 +71,7 @@ export async function POST({ request }) {
     const utilsCommonFileContent = await renderFile(TEMPLATE.UTILS);
     fsExtra.outputFileSync(utilsCommonFile, utilsCommonFileContent);
 
-    templates += `Code Template -> ${packageFile}:\n`;
+    templates += `Package -> ${packageFile}:\n`;
     templates += `${packageFileContent}\n\n`;
     templates += `Code Template -> ${appFile}:\n`;
     templates += `${appFileContent}\n\n`;
@@ -130,7 +122,8 @@ export async function POST({ request }) {
       .map(async (promise) => {
         const { filePath, fileContent, componentName, apiDocsUrl, apiDocs } = await promise;
 
-        const apiDocsContent = apiDocsUrl
+        const apiDocsContent = aiEnabled
+          && apiDocsUrl
           && await browserless.getApiDocsByUrl(apiDocsUrl)
           || apiDocs;
 
@@ -140,7 +133,9 @@ export async function POST({ request }) {
           ? `These are the main api docs: ${mainApiDocsContent}\n\nThese are the api docs for the component: ${apiDocsContent}\n\n${templatePrompt}`
           : `These are the main api docs: ${mainApiDocsContent}\n\n${templatePrompt}`;
         
-        const improvement = await openai.createChatCompletion(prompt);
+        console.log("prompt!!!", prompt);
+        
+        const improvement = aiEnabled && await openai.createChatCompletion(prompt);
         return { filePath, fileContent, componentName, improvement };
       });
 

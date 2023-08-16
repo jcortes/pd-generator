@@ -56,7 +56,9 @@ export default {
         this.setLastCreatedAt(lastResource.created_at);
       }
 
-      resources.reverse().forEach(this.processEvent);
+      Array.from(resources)
+        .reverse()
+        .forEach(this.processEvent);
     },
   },
   async run() {

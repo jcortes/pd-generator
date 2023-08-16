@@ -25,11 +25,12 @@ declare global {
 			app: string;
 			baseUrl: string;
 			versionPath: string;
-			actions: ActionProps[];
-			sources: SourceProps[];
+			actions: any[];
+			sources: any[];
 			buildPath: string;
-			apiDocs?: string;
-			apiDocsUrl?: string;
+			mainApiDocs: string;
+			mainApiDocsUrl: string;
+			aiEnabled: boolean;
 		};
 
 		interface ResponseData {

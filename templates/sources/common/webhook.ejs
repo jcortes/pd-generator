@@ -12,7 +12,12 @@ export default {
     },
   },
   hooks: {
-    async deploy() {},
+    async deploy() {
+      const resourcesFn = this.getResourcesFn();
+      const { [this.getResourcesName()]: resources } =
+        await resourcesFn(this.getResourcesFnArgs());
+      resources.forEach(this.processResource);
+    },
     async activate() {
       const response =
         await this.createWebhook({
@@ -44,6 +49,15 @@ export default {
     getEventName() {
       throw new ConfigurationError("getEventName is not implemented");
     },
+    getResourcesFn() {
+      throw new ConfigurationError("getResourcesFn is not implemented");
+    },
+    getResourcesFnArgs() {
+      throw new ConfigurationError("getResourcesFnArgs is not implemented");
+    },
+    processResource(resource) {
+      this.$emit(resource, this.generateMeta(resource));
+    },
     createWebhook(args = {}) {
       return this.app.post({
         path: "/webhooks",
@@ -60,6 +74,10 @@ export default {
     },
   },
   async run({ body }) {
-    this.$emit(body, this.generateMeta(body));
+    this.http.respond({
+      status: 200,
+    });
+
+    this.processResource(body);
   },
 };
