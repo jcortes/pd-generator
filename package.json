@@ -11,7 +11,8 @@
 		"test": "playwright test",
 		"test:unit": "vitest",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
-		"format": "prettier --plugin-search-dir . --write ."
+		"format": "prettier --plugin-search-dir . --write .",
+		"gen": "node ./scripts/generate.mjs"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",

@@ -1,27 +1,31 @@
 export default [{
-  app: "apollo_io",
-  baseUrl: "https://api.apollo.io",
+  app: "scale_ai",
+  baseUrl: "https://api.scale.com",
   versionPath: "/v1",
-  buildPath: "/Users/jcortes/Public/git/pipedream/components/apollo_io/build",
+  buildPath: "/Users/jcortes/Public/git/pipedream/components/scale_ai/build",
   actions: [
     {
-      name: "People Enrichment",
-      description: "Enriches a person's information, the more information you pass in, the more likely we can find a match.",
-      apiDocsUrl: "https://apolloio.github.io/apollo-api-docs/?shell#people-enrichment"
-    }
-  ],
-  sources: [
-    {
-      name: "Contact Created",
-      description: "Triggers when a contact is created.",
-      apiDocsUrl: "https://apolloio.github.io/apollo-api-docs/?shell#search-for-contacts",
-      strategy: "polling"
+      name: "Create Image Annotation Task",
+      description: "Create an image annotation task.",
+      apiDocsUrl: "https://docs.scale.com/reference/general-image-annotation"
     },
     {
-      name: "Contact Updated",
-      description: "Triggers when a contact is updated.",
-      apiDocsUrl: "https://apolloio.github.io/apollo-api-docs/?shell#search-for-contacts",
-      strategy: "polling"
-    }
+      name: "Create Text Annotation Task",
+      description: "Create a text annotation task.",
+      apiDocsUrl: "https://docs.scale.com/reference/text-collection"
+    },
+    {
+      name: "Create Document Transcription Task",
+      description: "Create a document transcription task.",
+      apiDocsUrl: "https://docs.scale.com/reference/document-transcription-1"
+    },
+  ],
+  sources: [
+    // {
+    //   name: "",
+    //   description: "",
+    //   apiDocsUrl: "",
+    //   strategy: "polling"
+    // },
   ],
 }];

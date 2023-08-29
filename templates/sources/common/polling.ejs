@@ -4,7 +4,6 @@ import {
 } from "@pipedream/platform";
 import common from "./base.mjs";
 import constants from "../../common/constants.mjs";
-import utils from "../../common/utils.mjs";
 
 export default {
   ...common,
@@ -45,9 +44,7 @@ export default {
       const meta = this.generateMeta(resource);
       this.$emit(resource, meta);
     },
-    async processStreamEvents(resourcesStream) {
-      const resources = await utils.streamIterator(resourcesStream);
-
+    async processResources(resources) {
       const [
         lastResource,
       ] = resources;
@@ -62,12 +59,12 @@ export default {
     },
   },
   async run() {
-    const resourcesStream = this.app.getResourcesStream({
+    const resources = await this.app.paginate({
       resourceFn: this.getResourceFn(),
       resourceFnArgs: this.getResourceFnArgs(),
       resourceName: this.getResourceName(),
     });
 
-    await this.processStreamEvents(resourcesStream);
+    this.processResources(resources);
   },
 };

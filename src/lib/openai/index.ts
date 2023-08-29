@@ -1,6 +1,6 @@
 import fsExtra from "fs-extra";
 import { error } from "@sveltejs/kit";
-import { OpenAIApi, Configuration } from "openai";
+import { OpenAIApi, Configuration, type CreateChatCompletionRequest } from "openai";
 import { env } from "$env/dynamic/private";
 
 const systemDocs = fsExtra.readFileSync("prompts/system2.md", "utf-8");
@@ -42,6 +42,21 @@ async function createChatCompletion(prompt: string) {
   }
 }
 
+async function createChatCompletionV2(args: CreateChatCompletionRequest) {
+  try {
+    return await openai.createChatCompletion({
+      model: "gpt-4",
+      temperature: 0,
+      ...args
+    });
+    
+  } catch (err: any) {
+    console.log(err.response?.data);
+    throw error(err.response?.status, err.response.data.error?.message ?? err.message)
+  }
+}
+
 export default {
   createChatCompletion,
+  createChatCompletionV2,
 };

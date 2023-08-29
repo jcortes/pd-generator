@@ -1,4 +1,5 @@
 <script lang="ts">
+  let lib = "axios";
   let app = "";
   let baseUrl = "";
   let versionPath = "";
@@ -20,6 +21,7 @@
     const response = await fetch("/", {
       method: "POST",
       body: JSON.stringify({
+        lib,
         app,
         baseUrl,
         versionPath,
@@ -87,6 +89,15 @@
 <h1>Pipedream Generator</h1>
 
 <form>
+  <div>
+    <label for="lib">Client Lib:</label>
+    <select id="lib" bind:value={lib}>
+      <option value="axios">Axios</option>
+      <option value="graphql">GraphQL</option>
+    </select>
+  </div>
+  <br>
+
   <div style="display: flex; justify-content: left;">
     <input id="app-name" type="text" bind:value={app} placeholder="App Name" style="flex-basis: 30%; margin-right: 6px; font-size: inherit;"/>
   </div>

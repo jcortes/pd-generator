@@ -26,7 +26,10 @@ const DIRS = {
 
 const TEMPLATE = {
   PACKAGE: join(DIRS.TEMPLATES, "package.ejs"),
-  APP: join(DIRS.TEMPLATES, "app.ejs"),
+  APP: {
+    axios: join(DIRS.TEMPLATES, "app.ejs"),
+    graphql: join(DIRS.TEMPLATES, "app.graphql.ejs")
+  },
   CONSTANTS: join(DIRS.TEMPLATES, DIRS.COMMON, "constants.ejs"),
   UTILS: join(DIRS.TEMPLATES, DIRS.COMMON, "utils.ejs"),
   ACTION: join(DIRS.TEMPLATES, DIRS.ACTIONS, COMPONENT_TYPE.ACTION, "action.ejs"),

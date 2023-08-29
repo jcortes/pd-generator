@@ -369,6 +369,14 @@ function splitString(str, nthChar = 8) {
   return str.match(regex);
 }
 
+function getParamFromUrl(url, key = "cursor") {
+  if (!url) {
+    return null;
+  }
+  const parsedUrl = new URL(url);
+  return parsedUrl.searchParams.get(key);
+}
+
 /*
 function buildPropDefinitions({
   app = {}, props = {},
@@ -470,4 +478,5 @@ export default {
   parseFields,
   addEllipsis,
   splitString,
+  getParamFromUrl,
 };

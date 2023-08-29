@@ -1,6 +1,6 @@
-import { axios } from "@pipedream/platform";
-import constants from "./common/constants.mjs";<% if (hasPolling) { %>
-import utils from "./common/utils.mjs";<% } %>
+import "graphql/language/index.js";
+import { GraphQLClient } from "graphql-request";
+import constants from "./common/constants.mjs";
 
 export default {
   type: "app",
@@ -16,9 +16,6 @@ export default {
     getBaseUrl() {
       return `${constants.BASE_URL}${constants.VERSION_PATH}`;
     },
-    getUrl(path, url) {
-      return url || `${this.getBaseUrl()}${path}`;
-    },
     getHeaders(headers) {
       return {
         "Content-Type": "application/json",
@@ -26,41 +23,15 @@ export default {
         ...headers,
       };
     },
-    makeRequest({
-      step = this, path, headers, url, ...args
-    } = {}) {
-
-      const config = {
+    getClient(headers) {
+      return new GraphQLClient(this.getBaseUrl(), {
         headers: this.getHeaders(headers),
-        url: this.getUrl(path, url),
-        ...args,
-      };
-
-      return axios(step, config);
-    },
-    post(args = {}) {
-      return this.makeRequest({
-        method: "post",
-        ...args,
       });
     },
-    put(args = {}) {
-      return this.makeRequest({
-        method: "put",
-        ...args,
-      });
-    },
-    delete(args = {}) {
-      return this.makeRequest({
-        method: "delete",
-        ...args,
-      });
-    },
-    patch(args = {}) {
-      return this.makeRequest({
-        method: "patch",
-        ...args,
-      });
+    makeRequest({
+      headers, query, variables,
+    } = {}) {
+      return this.getClient(headers).request(query, variables);
     },<% if (hasPolling) { %>
     async *getResourcesStream({
       resourceFn,
@@ -106,17 +77,6 @@ export default {
 
         page += 1;
       }
-    },
-    paginate({
-      resourceFn, resourceFnArgs, resourceName, ...args
-    } = {}) {
-      const stream = this.getResourcesStream({
-        resourceFn,
-        resourceFnArgs,
-        resourceName,
-        ...args,
-      });
-      return utils.streamIterator(stream);
     },<% } %>
   },
 };

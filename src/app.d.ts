@@ -22,6 +22,7 @@ declare global {
 		}
 		
 		interface RequestData {
+			lib: "axios" | "graphql";
 			app: string;
 			baseUrl: string;
 			versionPath: string;

@@ -17,6 +17,7 @@ const {
 
 export async function POST({ request }) {
   const {
+    lib = "axios",
     app,
     baseUrl = "https://api.changeit.com",
     versionPath = "/v1",
@@ -58,7 +59,7 @@ export async function POST({ request }) {
   
     // Creates the main app file
     const appFile = join(appDir, `${app}.app.${EXTENSION.MJS}`);
-    const appFileContent = await renderFile(TEMPLATE.APP, { app, hasPolling });
+    const appFileContent = await renderFile(TEMPLATE.APP[lib], { app, hasPolling });
     fsExtra.outputFileSync(appFile, appFileContent);
   
     // Creates the constants.mjs file inside main common dir
